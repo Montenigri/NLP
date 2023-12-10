@@ -443,3 +443,11 @@ train_loss, validation_loss,test_loss, train_acc, validation_acc, test_acc = tra
                                                 criterion,
                                                 early_stopping,
                                                 val_dataset)
+
+
+torch.save({
+            'epoch': 10, #Epoca finale, da modificare in modo da renderla dinamica
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            'loss': train_loss,
+            }, "model_10_epochs")

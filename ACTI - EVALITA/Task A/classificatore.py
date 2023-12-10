@@ -178,7 +178,7 @@ train_dataset = Dataset(x_train, char_count_train,emoji_train,hashtag_train, y_t
 val_dataset = Dataset(x_val,char_count_val,emoji_val,hashtag_val, y_val, hyperparameters["stopwords"])
 test_dataset = Dataset(x_test, char_count_test,emoji_test,hashtag_test, y_test, hyperparameters["stopwords"])
 
-
+'''
 class ClassifierDeep(nn.Module):
 
     def __init__(self, labels, hdim, dropout, model_name,extra_features = hyperparameters['extra_features']):
@@ -196,10 +196,26 @@ class ClassifierDeep(nn.Module):
         output = self.lm_model(input_id_text, attention_mask).last_hidden_state
         output = output[:,0,:]
         output = torch.cat((output, char_count.unsqueeze(-1),emoji_text,hashtag), dim=1)  # Concatena il conteggio dei caratteri
+        return self.classifier(output)  
+'''
+class ClassifierDeep(nn.Module):
+
+    def __init__(self, labels, hdim, dropout, model_name,extra_features = hyperparameters['extra_features']):
+        super(ClassifierDeep, self).__init__()
+        config = AutoConfig.from_pretrained(model_name)
+        self.lm_model = AutoModel.from_pretrained(model_name, config=config)
+        self.classifier = nn.Sequential(
+            nn.Dropout(dropout),
+            nn.ReLU(),
+            nn.Linear(hdim + extra_features, 2)
+            )
+
+    def forward(self, input_id_text, attention_mask, char_count,emoji_text, hashtag):
+        output = self.lm_model(input_id_text, attention_mask).last_hidden_state
+        output = output[:,0,:]
+        output = torch.cat((output, char_count.unsqueeze(-1),emoji_text,hashtag), dim=1)  # Concatena il conteggio dei caratteri
         return self.classifier(output)
     
-
-
 class EarlyStopping:
     def __init__(self, patience=5, min_delta=0.0):
 

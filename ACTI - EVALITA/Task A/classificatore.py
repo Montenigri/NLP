@@ -12,6 +12,10 @@ from sklearn.utils import shuffle
 import nltk
 import matplotlib.pyplot as plt
 import emoji
+import pickle
+
+
+
 dataset = pd.read_csv('Dataset/subtaskA_train.csv',  header=0, names=['id', 'text', 'label'])
 augmented_dataset = dataset.copy()
 augmented_dataset = augmented_dataset['text'].apply(lambda x: x.replace('\r', ' ').replace('\n', ' '))
@@ -411,7 +415,6 @@ train_loss, validation_loss,test_loss, train_acc, validation_acc, test_acc = tra
                                                 early_stopping,
                                                 val_dataset)
 
-import pickle
 with open('train_loss_aug.pickle', 'wb') as f:
     pickle.dump(train_loss, f)
 with open('validation_loss_aug.pickle', 'wb') as f:

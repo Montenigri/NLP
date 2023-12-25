@@ -153,3 +153,4 @@ cython_debug/
 cookies_snapshot/
 ACTI - EVALITA/Task A/model_10_epochs
 ACTI - EVALITA/Task A/best_weight.pkl
+ACTI - EVALITA/Task A/best_weight_original.pkl
